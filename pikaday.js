@@ -649,7 +649,19 @@
          */
         toString: function(format)
         {
-            return !isDate(this._d) ? '' : hasMoment ? moment(this._d).format(format || this._o.format) : this._d.toDateString();
+            // return !isDate(this._d) ? '' : hasMoment ? moment(this._d).format(format || this._o.format) : this._d.toDateString();
+            if (!isDate(this._d)) {
+                return '';
+            }
+
+            var y = this._d.getFullYear();
+            var m = this._d.getMonth() + 1;
+            var d = this._d.getDate();
+
+            var year = y;
+            var month = m < 10 ? ('0' + m) : m;
+            var day = d < 10 ? ('0' + d) : d;
+            return [day, month, year].join('/');
         },
 
         /**
@@ -899,24 +911,24 @@
             }
 
             // default position is bottom & left
-            if ((this._o.reposition && left + width > viewportWidth) ||
-                (
-                    this._o.position.indexOf('right') > -1 &&
-                    left - width + field.offsetWidth > 0
-                )
-            ) {
-                left = left - width + field.offsetWidth;
-            }
-            if ((this._o.reposition && top + height > viewportHeight + scrollTop) ||
-                (
-                    this._o.position.indexOf('top') > -1 &&
-                    top - height - field.offsetHeight > 0
-                )
-            ) {
-                top = top - height - field.offsetHeight;
-            }
+            // if ((this._o.reposition && left + width > viewportWidth) ||
+            //     (
+            //         this._o.position.indexOf('right') > -1 &&
+            //         left - width + field.offsetWidth > 0
+            //     )
+            // ) {
+            //     left = left - width + field.offsetWidth;
+            // }
+            // if ((this._o.reposition && top + height > viewportHeight + scrollTop) ||
+            //     (
+            //         this._o.position.indexOf('top') > -1 &&
+            //         top - height - field.offsetHeight > 0
+            //     )
+            // ) {
+            //     top = top - height - field.offsetHeight;
+            // }
 
-            this.el.style.position = 'absolute';
+            this.el.style.position = 'relative';
             this.el.style.left = left + 'px';
             this.el.style.top = top + 'px';
         },
@@ -1029,7 +1041,6 @@
                 this.el.parentNode.removeChild(this.el);
             }
         }
-
     };
 
     return Pikaday;
